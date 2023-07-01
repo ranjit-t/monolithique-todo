@@ -93,3 +93,18 @@ li button {
 .login-section * {
   margin-top: 5px;
 }
+.avatar {
+  display: flex;
+  max-width: 250px;
+}
+.avatar input {
+  font-size: 15px;
+  padding: 4px;
+}
+.avatar button {
+  font-size: 15px;
+  padding: 3px;
+}
+.avatar-img {
+  border-radius: 30px;
+}

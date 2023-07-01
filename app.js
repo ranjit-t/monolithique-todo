@@ -11,8 +11,6 @@ const cookieParser = require("cookie-parser");
 const hbsViewsPath = path.join(__dirname, "./templates/views");
 const hbsPartialsPath = path.join(__dirname, "./templates/partials");
 
-// console.log(hbsViewsPath);
-
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -30,9 +28,7 @@ const users = JSON.parse(readFileSync("./data/users.json"));
 
 const jwtsecret = "mysecretcodefromtodolist";
 
-// MiddleWare
-
-// MiddleWare
+// MiddleWare for Login and Signup
 const middleWare1 = (req, res, next) => {
   let token = req.cookies.jwt;
 
@@ -41,14 +37,16 @@ const middleWare1 = (req, res, next) => {
       const decodedToken = jwt.verify(token, jwtsecret);
       var currentTimestamp = new Date().getTime() / 1000;
       req.loggedIn = decodedToken.exp > currentTimestamp;
+      req.email = decodedToken.email;
     } catch (err) {
       req.loggedIn = false;
       console.log(err);
     }
   }
-  //   console.log(req.loggedIn);
   next();
 };
+
+// MiddleWare for the rest
 
 const middleWare2 = (req, res, next) => {
   let token = req.cookies.jwt;
@@ -60,6 +58,7 @@ const middleWare2 = (req, res, next) => {
       const decodedToken = jwt.verify(token, jwtsecret);
       var currentTimestamp = new Date().getTime() / 1000;
       req.loggedIn = decodedToken.exp > currentTimestamp;
+      req.email = decodedToken.email;
     } catch (err) {
       req.loggedIn = false;
       console.log(err);
@@ -151,6 +150,57 @@ app.post("/signupauth", async (req, res) => {
 });
 
 app.use(middleWare2);
+
+app.get("/profile", (req, res) => {
+  const email = req.email;
+
+  let existingUser = users.find((user) => user.email === email);
+  //   console.log(existingUser);
+
+  res.render("profile.hbs", {
+    pageTitle: "Profile",
+    loggedIn: req.loggedIn,
+    tasks,
+    userdetails: { email, username: existingUser.username },
+  });
+});
+
+const multer = require("multer");
+
+const avatar = multer({
+  // dest: "avatars",
+
+  storage: multer.diskStorage({
+    destination: "./public/img",
+    filename: function (req, file, cb) {
+      const email = req.email; // Assuming req.email contains the email value
+      const uniqueFileName = email + ".jpg"; // Use the email as the filename
+      cb(null, uniqueFileName);
+    },
+  }),
+  limits: {
+    fileSize: 1024 * 1024,
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)/)) {
+      return cb(new Error("please upload image files ending with .jpg"));
+    }
+    cb(undefined, true);
+  },
+});
+
+app.post(
+  "/avatarupload",
+  avatar.single("avatar"),
+  (req, res) => {
+    // res.send({ message: "image uploaded successfully" });
+    console.log("image uploaded successfully");
+    res.redirect("/profile");
+  },
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
 
 app.post("/addtask", (req, res) => {
   const task = req.body.task;
