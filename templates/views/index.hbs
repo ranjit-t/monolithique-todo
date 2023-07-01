@@ -4,15 +4,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo List</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
     {{>header}}
     <div class="tasks-section">
-      <input type="text" placeholder="enter your new task" name="task">
+      <form action="/addtask" method="post">
+        <input type="text" placeholder="enter your new task" name="task" required>
+        <button type="submit">Add</button>
+      </form>
       <div class="tasks-list">
         <ul>
       {{#each tasks}}
-        <li><span>{{this}}</span> <button class="check-btn">✓</button> <button class="delete-btn">X</button></li>
+        <li><span class="task-text">{{this}}</span> <button class="check-btn">✓</button> <button class="fa fa-trash delete-btn"></button></li>
       {{/each}}
     </ul>
       </div>

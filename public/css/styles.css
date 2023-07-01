@@ -13,6 +13,14 @@ body {
   padding: 5px;
   text-decoration: none;
 }
+form {
+  display: flex;
+  flex-direction: column;
+}
+form button {
+  padding: 1px;
+  font-size: 1.2rem;
+}
 p {
   font-size: 1.2rem;
 }
@@ -24,6 +32,12 @@ h1 {
 }
 .tasks-section {
   margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  /* margin: 0 auto; */
+  justify-content: center;
+  align-items: center;
 }
 input {
   min-width: 150px;
@@ -34,10 +48,24 @@ input {
 .tasks-list {
   margin-top: 30px;
 }
-li {
-  padding: 5px;
-  max-width: 350px;
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  /* margin: 0 auto; */
+  justify-content: center;
+  align-items: center;
+}
+li {
+  padding: 15px 0;
+  width: 250px;
+  display: flex;
+}
+.task-text {
+  width: 200px;
 }
 li button {
   position: absolute;
@@ -48,4 +76,10 @@ li button {
 }
 .completed {
   text-decoration: line-through;
+}
+
+.loading {
+  position: absolute;
+  right: -80px;
+  font-size: 1.2rem;
 }
