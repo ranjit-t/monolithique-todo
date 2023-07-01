@@ -27,7 +27,7 @@ deleteBtns.forEach((deleteBtn) => {
       // console.log(json);
       const loading = document.createElement("span");
       loading.classList.add("loading");
-      loading.innerHTML = "...loading";
+      loading.innerHTML = "...deleting";
       currentTask = deleteBtn.parentElement.appendChild(loading);
       setTimeout(() => {
         window.location.href = "http://localhost:5000/";

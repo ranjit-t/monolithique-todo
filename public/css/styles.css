@@ -83,3 +83,13 @@ li button {
   right: -80px;
   font-size: 1.2rem;
 }
+
+.login-section {
+  margin-top: 30px;
+}
+.tasks-section * {
+  margin-top: 5px;
+}
+.login-section * {
+  margin-top: 5px;
+}
