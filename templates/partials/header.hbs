@@ -3,10 +3,12 @@
   <a href="/">Home</a>
   {{#if loggedIn}}
     <a href="/profile">Profile</a>
-    <a href="/logout">Logout</a>
+    <a class="logout-btn">Logout</a>
   {{else}}
     <a href="/login">Login</a>
     <a href="/signup">Signup</a>
   {{/if}}
   {{! <a href="/about">About</a> }}
+  <script src="/js/logout.js"></script>
+
 </div>

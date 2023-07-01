@@ -149,6 +149,11 @@ app.post("/signupauth", async (req, res) => {
   res.redirect("/");
 });
 
+app.post("/logout", (req, res) => {
+  res.cookie("jwt", "", {});
+  res.redirect("/login");
+});
+
 app.use(middleWare2);
 
 app.get("/profile", (req, res) => {

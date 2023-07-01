@@ -8,9 +8,9 @@
   </head>
   <body>
     {{>header}}
-   <p>Hello <b>{{userdetails.username}}</b>!</p>
+   <p>Hello <span class="user-details">{{userdetails.username}}</span>!</p>
    <img src="/img/{{userdetails.email}}.jpg" alt="Profile" width="200px" class="avatar-img">
-   <p>Email : {{userdetails.email}}</p>
+   <p>Email : <span class="user-details">{{userdetails.email}}</span></p>
     <h3>Change Avatar</h3>
 <form action="/avatarupload" method="post" enctype="multipart/form-data" class="avatar">
     <input type="file" placeholder="Avatar" name="avatar" required>

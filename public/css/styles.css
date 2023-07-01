@@ -108,3 +108,9 @@ li button {
 .avatar-img {
   border-radius: 30px;
 }
+.logout-btn {
+  cursor: pointer;
+}
+.user-details {
+  font-size: 1.5rem;
+}
