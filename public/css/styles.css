@@ -1,0 +1,51 @@
+body {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(222, 225, 225);
+}
+.menu-bar a {
+  color: rgb(123, 124, 125);
+  font-size: 1.5rem;
+  padding: 5px;
+  text-decoration: none;
+}
+p {
+  font-size: 1.2rem;
+}
+h1 {
+  color: rgb(55, 54, 54);
+}
+.error-page {
+  margin-top: 150px;
+}
+.tasks-section {
+  margin-top: 30px;
+}
+input {
+  min-width: 150px;
+  font-size: 20px;
+  padding: 4px;
+}
+
+.tasks-list {
+  margin-top: 30px;
+}
+li {
+  padding: 5px;
+  max-width: 350px;
+  position: relative;
+}
+li button {
+  position: absolute;
+  right: 0;
+}
+.check-btn {
+  right: 30px;
+}
+.completed {
+  text-decoration: line-through;
+}

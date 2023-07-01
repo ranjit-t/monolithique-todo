@@ -1,0 +1,12 @@
+<h1>{{pageTitle}}</h1>
+<div class="menu-bar">
+  <a href="/">Home</a>
+  {{#if loggedIn}}
+    <a href="/profile">Profile</a>
+    <a href="/logout">Logout</a>
+  {{else}}
+    <a href="/login">Login</a>
+    <a href="/signup">Signup</a>
+  {{/if}}
+  {{! <a href="/about">About</a> }}
+</div>
