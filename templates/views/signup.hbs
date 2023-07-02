@@ -17,6 +17,9 @@
     <input type="password" placeholder="Password" name="password" required/>
     <button type="submit" class="signup">Signup</button>
   </form>
+   {{#if message}}
+  <p class="error-message">{{message}}</p>
+  {{/if}}
 </div>
     {{!-- <script src="/js/signup.js"></script> --}}
 

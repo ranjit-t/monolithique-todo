@@ -114,10 +114,20 @@ app.post("/loginauth", async (req, res) => {
       });
       return res.redirect("/");
     } else {
-      return res.send("password didn't match");
+      //   return res.send("password didn't match");
+      res.render("login.hbs", {
+        pageTitle: "Login",
+        loggedIn: req.loggedIn,
+        message: "password didn't match",
+      });
     }
   } else {
-    return res.send("user not found");
+    // return res.send("user not found");
+    res.render("login.hbs", {
+      pageTitle: "Login",
+      loggedIn: req.loggedIn,
+      message: "user not found",
+    });
   }
 });
 
@@ -130,6 +140,16 @@ app.get("/signup", (req, res) => {
 
 app.post("/signupauth", async (req, res) => {
   const { username, email, password } = req.body;
+
+  let existingUser = users.find((user) => user.email === email);
+
+  if (existingUser) {
+    return res.render("signup.hbs", {
+      pageTitle: "Signup",
+      loggedIn: req.loggedIn,
+      message: "user already exists please login",
+    });
+  }
 
   const hash = await bcrypt.hash(password, 10);
 

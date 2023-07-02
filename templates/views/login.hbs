@@ -15,7 +15,12 @@
     <input type="text" placeholder="Email" name="email" required/>
     <input type="password" placeholder="Password" name="password" required/>
     <button type="submit">Login</button>
+    
   </form>
+  {{#if message}}
+  <p class="error-message">{{message}}</p>
+  {{/if}}
+  
 </div>
     <script src="/js/index.js"></script>
 
