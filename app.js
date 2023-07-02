@@ -23,7 +23,6 @@ app.set("view engine", "hbs");
 hbs.registerPartials(hbsPartialsPath);
 app.set("views", hbsViewsPath);
 
-const tasks = JSON.parse(readFileSync("./data/data.json"));
 const users = JSON.parse(readFileSync("./data/users.json"));
 
 const jwtsecret = "mysecretcodefromtodolist";
@@ -72,6 +71,16 @@ const middleWare2 = (req, res, next) => {
 app.use(middleWare1);
 
 app.get("/", async (req, res) => {
+  const email = req.email;
+  if (!email) {
+    return res.render("index.hbs", {
+      pageTitle: "Todo List",
+      loggedIn: req.loggedIn,
+    });
+  }
+  let existingUser = users.find((user) => user.email === email);
+  const tasks = existingUser.tasks;
+
   res.render("index.hbs", {
     pageTitle: "Todo List",
     loggedIn: req.loggedIn,
@@ -83,7 +92,7 @@ app.get("/login", (req, res) => {
   res.render("login.hbs", {
     pageTitle: "Login",
     loggedIn: req.loggedIn,
-    tasks,
+    // tasks,
   });
 });
 
@@ -94,19 +103,15 @@ app.post("/loginauth", async (req, res) => {
     const passwordMatched = await bcrypt.compare(password, existingUser.hash);
     console.log(passwordMatched);
     if (passwordMatched) {
-      // Generate and sign a JSON Web Token (JWT)
-
       const token = jwt.sign({ email }, jwtsecret, {
         expiresIn: "1d",
       });
 
-      // Set the token as a cookie in the response
       res.cookie("jwt", token, {
         httpOnly: true,
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
-      //   return res.send("login successful");
       return res.redirect("/");
     } else {
       return res.send("password didn't match");
@@ -120,7 +125,6 @@ app.get("/signup", (req, res) => {
   res.render("signup.hbs", {
     pageTitle: "Signup",
     loggedIn: req.loggedIn,
-    tasks,
   });
 });
 
@@ -140,7 +144,6 @@ app.post("/signupauth", async (req, res) => {
     expiresIn: "1d",
   });
 
-  // Set the token as a cookie in the response
   res.cookie("jwt", token, {
     httpOnly: true,
     secure: true,
@@ -150,7 +153,7 @@ app.post("/signupauth", async (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.cookie("jwt", "", {});
+  res.cookie("jwt", "", { expiresIn: new Date(0) });
   res.redirect("/login");
 });
 
@@ -165,7 +168,7 @@ app.get("/profile", (req, res) => {
   res.render("profile.hbs", {
     pageTitle: "Profile",
     loggedIn: req.loggedIn,
-    tasks,
+    // tasks,
     userdetails: { email, username: existingUser.username },
   });
 });
@@ -208,18 +211,35 @@ app.post(
 );
 
 app.post("/addtask", (req, res) => {
+  const email = req.email;
+  let existingUser = users.find((user) => user.email === email);
   const task = req.body.task;
-  //   console.log(task);
-  tasks.push(task);
-  writeFileSync("./data/data.json", JSON.stringify(tasks));
+  existingUser.tasks.push(task);
+  modifiedUser = { ...existingUser, tasks: existingUser.tasks };
+  const restOfTheUsers = users.filter((user) => user.email !== email);
+  const allUsers = [...restOfTheUsers, modifiedUser];
+  console.log(allUsers);
+  writeFileSync("./data/users.json", JSON.stringify(allUsers));
   res.redirect("/");
 });
 app.post("/deletetask", (req, res) => {
+  //   const task = req.body.task;
+  //   console.log(task);
+  //   const newTasks = tasks.filter((item) => item !== task);
+  //   writeFileSync("./data/data.json", JSON.stringify(newTasks));
+  // res.send({ link: "/" });
+
+  const email = req.email;
+  let existingUser = users.find((user) => user.email === email);
   const task = req.body.task;
-  console.log(task);
-  const newTasks = tasks.filter((item) => item !== task);
-  writeFileSync("./data/data.json", JSON.stringify(newTasks));
-  res.send({ link: "/" });
+  //  existingUser.tasks.push(task);
+  const newTasks = existingUser.tasks.filter((item) => item !== task);
+  modifiedUser = { ...existingUser, tasks: newTasks };
+  const restOfTheUsers = users.filter((user) => user.email !== email);
+  const allUsers = [...restOfTheUsers, modifiedUser];
+  console.log(allUsers);
+  writeFileSync("./data/users.json", JSON.stringify(allUsers));
+  res.redirect("/");
 });
 
 app.get("*", (req, res) => {

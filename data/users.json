@@ -1,17 +1,14 @@
 [
   {
-    "username": "Ran Thota",
-    "email": "aveyronconnect@gmail.com",
-    "hash": "$2b$10$GxJfPd73NY46JW8bRkCfdOVLVyqTLCni2Cfm7f3EdsLL4/Cipe2ci"
+    "username": "Ran",
+    "email": "ran@gmail.com",
+    "hash": "$2b$10$gGfl4Ap.jeiCTgoQfJ4cj.5s2wVcaaMhpCaj.e/5cP.ZH9I.gJIie",
+    "tasks": []
   },
   {
-    "username": "Ranjith Thota",
-    "email": "amailtoranjith@gmail.com",
-    "hash": "$2b$10$gCan9FyNyNvY/HenifJO6u0OETHGXp.XTNQcmxKKt9RuCzY8hkfiS"
-  },
-  {
-    "username": "Ranith",
+    "username": "Ranit",
     "email": "a@gmail.com",
-    "hash": "$2b$10$HnJDHh30R0XBYniWj.0EtuEholysr9TB4GvuuWgebTILxFL0c6THO"
+    "hash": "$2b$10$HnJDHh30R0XBYniWj.0EtuEholysr9TB4GvuuWgebTILxFL0c6THO",
+    "tasks": []
   }
 ]

@@ -8,19 +8,30 @@
   </head>
   <body>
     {{>header}}
+    {{#if loggedIn}}
     <div class="tasks-section">
+      
       <form action="/addtask" method="post">
         <input type="text" placeholder="enter your new task" name="task" required>
         <button type="submit">Add</button>
       </form>
       <div class="tasks-list">
+        {{#if tasks.length}}
         <ul>
       {{#each tasks}}
         <li><span class="task-text">{{this}}</span> <button class="check-btn">✓</button> <button class="fa fa-trash delete-btn"></button></li>
       {{/each}}
     </ul>
+    {{else}}
+    <p>Your Tasks list is empty</p>
+    {{/if}}
       </div>
     </div>
+    {{else}}
+     <div class="tasks-section">
+      <p>Please Login to manage your tasks</p>
+    </div>
+    {{/if}}
     <script src="/js/index.js"></script>
 
   </body>
