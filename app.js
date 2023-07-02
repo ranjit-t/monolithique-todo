@@ -136,7 +136,7 @@ app.post("/signupauth", async (req, res) => {
   const passwordMatched = await bcrypt.compare(password, hash);
   console.log(passwordMatched);
 
-  const user = { username, email, hash };
+  const user = { username, email, hash, tasks: [] };
   users.push(user);
   writeFileSync("./data/users.json", JSON.stringify(users));
 
