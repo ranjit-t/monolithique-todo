@@ -3,8 +3,6 @@ const deleteBtns = document.querySelectorAll(".delete-btn");
 
 checkBtns.forEach((checkBtn) => {
   checkBtn.addEventListener("click", () => {
-    // console.log(checkBtn.parentElement.firstChild);
-    // currentTask = checkBtn.parentElement.firstChild.innerHTML;
     currentTaskElement = checkBtn.parentElement.firstChild;
     currentTaskElement.classList.toggle("completed");
     checkBtn.innerHTML = checkBtn.innerHTML === "✓" ? "X" : "✓";
@@ -23,15 +21,18 @@ deleteBtns.forEach((deleteBtn) => {
         },
         body: JSON.stringify({ task: currentTask }),
       });
-      // const json = await response.json();
-      // console.log(json);
       const loading = document.createElement("span");
       loading.classList.add("loading");
       loading.innerHTML = "...deleting";
       currentTask = deleteBtn.parentElement.appendChild(loading);
-      setTimeout(() => {
-        window.location.href = "http://localhost:5000/";
-      }, 1000);
+      if (response.ok) {
+        window.location.href = "/";
+      }
+
+      // setTimeout(() => {
+      //   // console.log("hello");
+      //   window.location.href = "/";
+      // }, 500);
     }
 
     deleteTask();
