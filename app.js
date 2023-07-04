@@ -6,6 +6,19 @@ const { readFileSync, writeFileSync } = require("fs");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const fs = require("fs");
+const mongoose = require("mongoose");
+const usersDB = require("./Models/users");
+
+// //Handle bar buffer
+// // Assuming you are using Express and Handlebars
+// const exphbs = require("express-handlebars");
+// const handlebars = exphbs.create();
+
+// // Define a custom Handlebars helper
+// handlebars.handlebars.registerHelper("bufferToBase64", function (buffer) {
+//   const base64 = buffer.toString("base64");
+//   return new handlebars.handlebars.SafeString(base64);
+// });
 
 //Routes
 const usersRoutes = require("./Routes/users-route");
@@ -27,10 +40,22 @@ app.set("view engine", "hbs");
 hbs.registerPartials(hbsPartialsPath);
 app.set("views", hbsViewsPath);
 
+const URL =
+  "mongodb+srv://ranjith:ranjithinaveyron@cluster0.zpe9beh.mongodb.net/?retryWrites=true&w=majority";
+
+mongoose
+  .connect(URL)
+  .then(() => {
+    console.log("connected to mongodb");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
 app.use(middleWare1);
 
 app.get("/", async (req, res) => {
-  const users = JSON.parse(readFileSync("./data/users.json"));
+  // const users = JSON.parse(readFileSync("./data/users.json"));
 
   const email = req.email;
   if (!email) {
@@ -39,7 +64,14 @@ app.get("/", async (req, res) => {
       loggedIn: req.loggedIn,
     });
   }
-  let existingUser = users.find((user) => user.email === email);
+  const existingUser = await usersDB.findOne({ email });
+  if (!existingUser) {
+    return res.render("index.hbs", {
+      pageTitle: "Todo List",
+      loggedIn: false,
+    });
+  }
+
   const tasks = existingUser.tasks;
 
   res.render("index.hbs", {

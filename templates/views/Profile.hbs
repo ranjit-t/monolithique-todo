@@ -9,7 +9,7 @@
   <body>
     {{>header}}
    <p class="user-details">Hello <span >{{userdetails.username}}</span>!</p>
-   <img src="/img/{{userdetails.email}}.jpg" alt="Profile" width="200px" class="avatar-img">
+ <img src="data:image/jpeg;base64,{{userdetails.photo}}" alt="Profile" width="200px" class="avatar-img">
    <p>Email : <span class="user-details">{{userdetails.email}}</span></p>
     <h3>Change Avatar</h3>
 <form action="/avatarupload" method="post" enctype="multipart/form-data" class="avatar">

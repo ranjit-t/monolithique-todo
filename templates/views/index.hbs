@@ -20,7 +20,7 @@
         {{#if tasks.length}}
         <ul>
       {{#each tasks}}
-        <li><span class="task-text">{{this}}</span> <button class="check-btn">✓</button> <button class="fa fa-trash delete-btn"></button></li>
+        <li><span class="task-text">{{this.title}}</span> <button class="check-btn">✓</button> <button class="fa fa-trash delete-btn"></button></li>
       {{/each}}
     </ul>
     {{else}}

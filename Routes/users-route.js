@@ -1,11 +1,10 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { readFileSync, writeFileSync } = require("fs");
+const usersDB = require("../Models/users");
 
 const router = express.Router();
 const jwtsecret = "mysecretcodefromtodolist";
-const users = JSON.parse(readFileSync("./data/users.json"));
 
 router.get("/login", (req, res) => {
   res.render("login.hbs", {
@@ -16,9 +15,14 @@ router.get("/login", (req, res) => {
 
 router.post("/loginauth", async (req, res) => {
   const { email, password } = req.body;
-  let existingUser = users.find((user) => user.email === email);
+
+  const existingUser = await usersDB.findOne({ email });
+
   if (existingUser) {
-    const passwordMatched = await bcrypt.compare(password, existingUser.hash);
+    const passwordMatched = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
     console.log(passwordMatched);
     if (passwordMatched) {
       const token = jwt.sign({ email }, jwtsecret, {
@@ -57,34 +61,40 @@ router.get("/signup", (req, res) => {
 router.post("/signupauth", async (req, res) => {
   const { username, email, password } = req.body;
 
-  let existingUser = users.find((user) => user.email === email);
-
-  if (existingUser) {
-    return res.render("signup.hbs", {
-      pageTitle: "Signup",
-      loggedIn: req.loggedIn,
-      message: "user already exists please login",
-    });
-  }
-
   const hash = await bcrypt.hash(password, 10);
 
-  const passwordMatched = await bcrypt.compare(password, hash);
+  const user = new usersDB({ username, email, password: hash });
 
-  const user = { username, email, hash, tasks: [] };
-  users.push(user);
-  writeFileSync("./data/users.json", JSON.stringify(users));
+  await user
+    .save()
+    .then(() => {
+      const token = jwt.sign({ email }, jwtsecret, {
+        expiresIn: "1d",
+      });
 
-  const token = jwt.sign({ email }, jwtsecret, {
-    expiresIn: "1d",
-  });
-
-  res.cookie("jwt", token, {
-    httpOnly: true,
-    secure: true,
-    maxAge: 24 * 60 * 60 * 1000,
-  });
-  res.redirect("/");
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+      return res.redirect("/");
+    })
+    .catch((err) => {
+      console.log(err.code === 11000);
+      if (err.code === 11000) {
+        return res.render("signup.hbs", {
+          pageTitle: "Signup",
+          loggedIn: req.loggedIn,
+          message: "user already exists please login",
+        });
+      } else {
+        return res.render("signup.hbs", {
+          pageTitle: "Signup",
+          loggedIn: req.loggedIn,
+          message: "Oops,Internal Error",
+        });
+      }
+    });
 });
 
 router.post("/logout", (req, res) => {

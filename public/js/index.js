@@ -28,11 +28,6 @@ deleteBtns.forEach((deleteBtn) => {
       if (response.ok) {
         window.location.href = "/";
       }
-
-      // setTimeout(() => {
-      //   // console.log("hello");
-      //   window.location.href = "/";
-      // }, 500);
     }
 
     deleteTask();
